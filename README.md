@@ -1,9 +1,11 @@
 # amazon-rekognition-face-collection-manager
 Simple python based web UI for managing a face collection in Amazon Rekognition
+EXAMPLE ONLY, NOT FOR USE IN PRODUCTION
 
 ## Requirements
-Python 3
-Django
+- Python3
+- Django
+- Boto3
 
 ## Execution
 1. Update rekognition bucket name and face collection IDs in views.py
