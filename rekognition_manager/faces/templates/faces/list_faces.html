@@ -1,0 +1,17 @@
+<h1>Faces in Collection</h1>
+{% if faces %}
+    <ul>
+    {% for face in faces %}
+        <li>
+            <img src="{{ face.image_url }}" alt="Face image" width="150" height="150"> <br>
+            <strong>Face ID:</strong> {{ face.face_id }} <br>
+            <strong>External ID:</strong> {{ face.ext_image_id }} <br>
+            <strong>Confidence:</strong> {{ face.confidence }} <br>
+            <a href="{% url 'delete_face' face.face_id %}">Delete</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No faces found in the collection.</p>
+{% endif %}
+<a href="{% url 'add_face' %}">Add New Face</a>
