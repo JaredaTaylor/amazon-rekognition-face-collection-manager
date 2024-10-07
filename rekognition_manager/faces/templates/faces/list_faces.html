@@ -3,7 +3,7 @@
     <ul>
     {% for face in faces %}
         <li>
-            <img src="{{ face.image_url }}" alt="Face image" width="150" height="150"> <br>
+            <img src="{{ face.image_url }}" alt="Face image" style="height: 150px; width: auto; max-width: 100%; display: block;"> <br>
             <strong>Face ID:</strong> {{ face.face_id }} <br>
             <strong>External ID:</strong> {{ face.ext_image_id }} <br>
             <strong>Confidence:</strong> {{ face.confidence }} <br>
