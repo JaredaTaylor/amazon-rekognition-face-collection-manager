@@ -22,5 +22,5 @@ urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     path('faces/', views.list_faces, name='list_faces'),
     path('faces/add/', views.add_face, name='add_face'),
-    path('faces/delete/<str:face_id>/', views.delete_face, name='delete_face'),
+    path('faces/delete/<str:face_id>/<str:user_id>/', views.delete_face, name='delete_face'),
 ]

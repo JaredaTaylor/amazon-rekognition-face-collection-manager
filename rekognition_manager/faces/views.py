@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import UploadImageForm
-from .facerek import FaceRek  # Import your FaceRek class
+from .facerek import FaceRek
 
-# Initialize your FaceRek object with collection and bucket settings
+# Initialize FaceRek object with collection and bucket settings
 rekognition = FaceRek()
 rekognition.bucket_name = ''
 rekognition.collection_id = ''
@@ -31,7 +31,7 @@ def add_face(request):
 
     return render(request, 'faces/add_face.html', {'form': form})
 
-def delete_face(request, face_id):
+def delete_face(request, face_id, user_id):
     # Delete the face from the collection
-    rekognition.delete_faces_from_collection([face_id])
+    rekognition.delete_faces_from_collection([face_id], user_id)
     return redirect('list_faces')
