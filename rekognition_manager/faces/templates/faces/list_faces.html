@@ -7,7 +7,7 @@
             <strong>Face ID:</strong> {{ face.face_id }} <br>
             <strong>External ID:</strong> {{ face.ext_image_id }} <br>
             <strong>Confidence:</strong> {{ face.confidence }} <br>
-            <a href="{% url 'delete_face' face.face_id %}">Delete</a>
+            <a href="{% url 'delete_face' face.face_id face.ext_image_id %}">Delete</a>
         </li>
     {% endfor %}
     </ul>

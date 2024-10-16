@@ -72,6 +72,14 @@ class FaceRek():
             QualityFilter='AUTO'
         )
 
+        r_face_id = response['FaceRecords'][0]['Face']['FaceId']
+
+        # Create User
+        self.rekognition.create_user(CollectionId=self.collection_id, UserId=face_id)
+
+        # Associate FaceID with User
+        self.rekognition.associate_faces(CollectionId=self.collection_id, FaceIds=[r_face_id], UserId=face_id)
+
         print(f'New face with ID {face_id} has been added to the collection {self.collection_id}.')
         return response['FaceRecords'][0]['Face']['FaceId']
 
@@ -104,9 +112,10 @@ class FaceRek():
         if len(response['Faces']) == 0:
             print(f'No faces in collection.')
         for face in response['Faces']:
-            img_url = f'https://{self.bucket_name}.s3.amazonaws.com/{face["ExternalImageId"]}'
-            new_face = Face(face_id=face["FaceId"], ext_image_id=face["ExternalImageId"], confidence=face["Confidence"], image_url=img_url)
-            faces.append(new_face)
+            if "UserId" in face:
+                img_url = f'https://{self.bucket_name}.s3.amazonaws.com/{face["ExternalImageId"]}'
+                new_face = Face(face_id=face["FaceId"], ext_image_id=face["UserId"], confidence=face["Confidence"], image_url=img_url)
+                faces.append(new_face)
 
         return faces
         # else:
@@ -114,11 +123,14 @@ class FaceRek():
 
     '''
     Removes index from face collection for AR
+    UPDATE TO DELETE USER AND FACEID
     '''
-    def delete_faces_from_collection(self, face_ids: list[str]):
-        response = self.rekognition.delete_faces(CollectionId=self.collection_id, FaceIds=face_ids)
+    def delete_faces_from_collection(self, face_ids: list[str], user_id: str):
+        self.rekognition.delete_user(CollectionId=self.collection_id, UserId=user_id)
+        self.rekognition.delete_faces(CollectionId=self.collection_id, FaceIds=face_ids)
 
-        print(f'Deleted FaceId(s): {response["DeletedFaces"]}')
+
+        # print(f'Deleted FaceId(s): {response["DeletedFaces"]}')
         # if response['StatusCode'] == 200:
         #     print(f'Deleted FaceId(s): {response["DeletedFaces"]}')
         # else:
@@ -149,13 +161,3 @@ class FaceRek():
                 print(f'Confidence: {match["Face"]["Confidence"]}\n')
         else:
             print(f'No matches found.')
-
-        # if response['StatusCode'] == 200:
-        #     face_matches = response['FaceMatches']
-        #     if len(face_matches) >= 1:
-        #         print(f'{len()} matches found in image.')
-        #         for match in face_matches:
-        #             print(f'FaceId: {match["FaceId"]}')
-        #             print(f'Confidence: {match["Confidence"]}\n')
-        #     else:
-        #         print(f'No matches found.')
